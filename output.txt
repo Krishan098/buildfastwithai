@@ -1,0 +1,27 @@
+Q1: What is the pdf about?
+A1: The PDF is an AI Intern Assignment. The task is to create a RAG-based chatbot that uses external data sources to answer questions accurately and contextually.
+
+Q2: List the key steps mentioned in the document.
+A2: The key steps mentioned in the document are:
+- Code documentation: ensure all classes and functions are well-documented and adhere to Python coding standards.
+- Response file: save a sample set of questions and chatbot responses in a .txt, .pdf, or .xlsx file.
+- GitHub repository: push all code (including notebooks if using Google Colab) and relevant files to a GitHub repository, then share the link.
+- Bonus points: earn additional points by deploying your chatbot on Streamlit and providing the application link in your submission email.
+- Deliverables: submit Python code, sample questions and chatbot responses, the GitHub repository, and an optional Streamlit link.
+- Submission: email the GitHub repo link and other relevant links/files to satvik@buildfastwithai.com.
+
+Q3: Who is the intended audience for this document?
+A3: The intended audience for this document is an AI intern.
+
+Q4: Are there any important deadlines or dates?
+A4: The deadline for the assignment is to be announced via email.
+
+Q5: What actions are expected from the reader?
+A5: The reader is expected to:
+- Build a chatbot using the RAG pipeline that can answer questions from users based on data loaded into the knowledge base.
+- Ensure the responses are accurate and utilise retrieval from the knowledge base.
+- Follow all guidelines and adhere to coding standards.
+- Upload all relevant files to GitHub and share the repository link via email before the deadline.
+- Include comments in the code wherever necessary.
+- Properly cite any external sources used.
+

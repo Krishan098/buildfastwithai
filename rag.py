@@ -25,7 +25,7 @@ from langchain import hub
 from langchain_community.document_loaders import PyPDFLoader, CSVLoader, TextLoader
 from langchain_core.documents import Document
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-from typing_extensions import List, TypedDict
+
 
 def load_document(file) -> list[Document]:
     file_path = f'temp/{file.name}'
@@ -123,3 +123,53 @@ graph_builder.add_edge("generate", END)
 from langgraph.checkpoint.memory import MemorySaver
 memory = MemorySaver()
 graph = graph_builder.compile(checkpointer=memory)
+
+if __name__ == "__main__":
+    '''Used ChatGPT for this part😃'''
+    from langgraph.prebuilt import create_react_agent
+    from langchain_core.messages import HumanMessage
+    from IPython.display import Image, display
+
+    # Step 1: Load and split PDF
+    docs = load_document(open("t.pdf", "rb"))  # ensure binary mode
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
+    all_splits = text_splitter.split_documents(docs)
+    _ = vector_store.add_documents(all_splits)
+
+    # Step 2: Create ReAct agent
+    agent_executor = create_react_agent(llm, [retrieve], checkpointer=memory)
+    display(Image(agent_executor.get_graph().draw_mermaid_png()))
+
+    # Step 3: Define list of questions
+    questions = [
+        "What is the pdf about?",
+        "List the key steps mentioned in the document.",
+        "Who is the intended audience for this document?",
+        "Are there any important deadlines or dates?",
+        "What actions are expected from the reader?",
+    ]
+
+    config = {"configurable": {"thread_id": "qa-thread-001"}}
+    qa_pairs = []
+
+    # Step 4: Ask questions and collect answers
+    for question in questions:
+        final_answer = ""
+
+        for event in agent_executor.stream(
+            {"messages": [{"role": "user", "content": question}]},
+            stream_mode="values",
+            config=config,
+        ):
+            msg = event["messages"][-1]
+            msg.pretty_print()
+            if msg.type == "ai":
+                final_answer = msg.content
+
+        qa_pairs.append((question, final_answer))
+
+    # Step 5: Save Q&A pairs to output.txt
+    with open("output.txt", "w", encoding="utf-8") as f:
+        for i, (q, a) in enumerate(qa_pairs, 1):
+            f.write(f"Q{i}: {q}\nA{i}: {a}\n\n")
+
