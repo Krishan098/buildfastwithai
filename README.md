@@ -1,0 +1,2 @@
+# buildfastwithai
+Assignment for internship
