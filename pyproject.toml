@@ -7,10 +7,11 @@ requires-python = ">=3.11"
 dependencies = [
     "chromadb>=1.0.9",
     "faiss-cpu>=1.11.0",
-    "langchain>=0.3.25",
+    "langchain[cohere]>=0.3.25",
     "langchain-community>=0.3.24",
     "langchain-google-genai>=2.1.4",
     "langchain-huggingface>=0.2.0",
+    "langgraph>=0.4.5",
     "pandas>=2.2.3",
     "pypdf>=5.5.0",
     "python-dotenv>=1.1.0",
@@ -18,4 +19,6 @@ dependencies = [
     "streamlit>=1.45.1",
     "torch>=2.7.0",
     "transformers>=4.51.3",
+    "ipykernel>=6.29.5",
+    "langchain-chroma>=0.2.4",
 ]

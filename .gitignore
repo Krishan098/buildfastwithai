@@ -173,3 +173,7 @@ cython_debug/
 # PyPI configuration file
 .pypirc
 .env
+/t.pdf
+/temp
+chroma_langchain_db/
+data/
