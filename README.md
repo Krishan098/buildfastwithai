@@ -1,9 +1,9 @@
 # PROJECT: CHATBOT IMPLEMENTATION USING RAG(MESSAGES AND AGENTS)
 
 ## Overview:
-        This project aims at providing the user a back-and-forth conversation with the chatbot that retrieves knowledge from the provided documents(.pdf,.txt,.csv) and then answers the questions based on that document.
+This project aims at providing the user a back-and-forth conversation with the chatbot that retrieves knowledge from the provided documents(.pdf,.txt,.csv) and then answers the questions based on that document.
 
-        This rag uses a sequence of messages instead of having the user input, retrieved context and generated as separate keys in the state. 
+This rag uses a sequence of messages instead of having the user input, retrieved context and generated as separate keys in the state. 
 ## Streamlit Link
     https://buildfastwithai-pfmftvl4jappox9g3pti9zb.streamlit.app/
 ## Installation
