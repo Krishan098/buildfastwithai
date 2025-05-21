@@ -28,6 +28,18 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 
 def load_document(file) -> list[Document]:
+    '''
+        
+    Loads the uploaded document for further processing.
+        
+    Args:
+        file: the file name.
+    
+    Returns:
+        a list of document objects(class for storing a peice of text and associated metadata), 
+        where document represents chunk of text.
+
+    '''
     file_path = f'temp/{file.name}'
     os.makedirs("temp", exist_ok=True)
     with open(file_path, 'wb') as f:
@@ -52,8 +64,17 @@ from langchain_core.tools import tool
 
 @tool
 def retrieve(query: str) -> str:
-    """Retrieve relevant information from the PDF."""
-    retrieved_docs = vector_store.similarity_search(query, k=2)
+    """
+    
+    Retrieve relevant information from the PDF.
+    
+    Args:
+        query: Text to look up documents similar to.
+    
+    Returns:
+        if relevant content found, returns the metadata and content of each retrieved document.
+    """
+    retrieved_docs = vector_store.similarity_search(query, k=2)#returns a list of documents after creating an embedding and finding similar documents for the query. 
     if not retrieved_docs:
         return "No relevant content found in the PDF."
     
@@ -65,16 +86,40 @@ def retrieve(query: str) -> str:
 from langchain_core.messages import SystemMessage
 from langgraph.prebuilt import ToolNode
 
+#Generate an AIMessage that may include a tool-call to be sent.
 def query_or_respond(state: MessagesState):
-    """Generate tool call for retrieval or respond."""
+    """
+    
+    Generate tool call for retrieval or respond.
+    
+    Args:
+        state (MessagesState): The current message state, typically a list or structure 
+                               containing the conversation history (user and assistant messages).
+    
+    Returns:
+        A dictionary containing new assistant messages.                           
+    """
     llm_with_tools = llm.bind_tools([retrieve])
     response = llm_with_tools.invoke(state["messages"])
     return {"messages": [response]}
 
+#Execute the retrieval
 tools = ToolNode([retrieve])
 
+#Generate a response 
 def generate(state: MessagesState):
-    """Generate answer."""
+    """
+    
+    Generate answer.
+    
+    Args:
+        state (MessagesState): The current message state, typically a list or structure 
+                               containing the conversation history (user and assistant messages).
+    
+    Returns:
+        A dictionary containing system messages and converation messages.
+    """
+    #Get generated ToolMessages
     recent_tool_messages = []
     for message in reversed(state["messages"]):
         if message.type == "tool":
@@ -83,6 +128,7 @@ def generate(state: MessagesState):
             break
     tool_messages = recent_tool_messages[::-1]
 
+    #format into prompt
     docs_content = "\n\n".join(doc.content for doc in tool_messages)
     system_message_content = (
         "You are an assistant for question-answering tasks. "
@@ -107,6 +153,10 @@ def generate(state: MessagesState):
 from langgraph.graph import END
 from langgraph.prebuilt import tools_condition
 
+#3 nodes used:
+#1. fields the user input, either generating a query for the retriever or responding directly
+#2. for the retrieval tool
+#3. for generating th final response using the retrieved context
 graph_builder.add_node(query_or_respond)
 graph_builder.add_node(tools)
 graph_builder.add_node(generate)
