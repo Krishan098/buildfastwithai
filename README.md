@@ -18,7 +18,7 @@ This rag uses a sequence of messages instead of having the user input, retrieved
     pip install -r requirements.txt
     ```
 ## Usage
-Run on Streamlit:
+- Run on Streamlit:
     ```sh
     streamlit run app.py
     ```
